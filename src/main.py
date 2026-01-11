@@ -11,6 +11,7 @@ def main():
     game_state = GameState(screen)
 
     game_state.draw_initial_grid()
+    print(game_state)
     
     clock = pygame.time.Clock()
     dt = 0
