@@ -3,7 +3,6 @@ import sys
 from constants import *
 from game_state import GameState
 from tile import *
-import random
 
 def main():
     pygame.init()

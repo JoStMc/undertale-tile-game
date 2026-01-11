@@ -35,6 +35,3 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_RIGHT]:
             self.direction = [1, 0]
             self.moving = True
-
-        if self.moving:
-            self.move()

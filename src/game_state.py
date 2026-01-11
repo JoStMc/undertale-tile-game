@@ -39,9 +39,27 @@ class GameState:
             self.player.update()
 
             if self.player.moving:
-                self.cooldown = 0.2
+                next_tile = [0, 0]
+                next_tile[0] = self.current_tile[0] + self.player.direction[0] 
+                next_tile[1] = self.current_tile[1] + self.player.direction[1] 
 
-                self.previous_tile = self.current_tile.copy()
-                self.current_tile[0] += self.player.direction[0] 
-                self.current_tile[1] += self.player.direction[1] 
+                if not self.detect_collision(next_tile):
+                    self.previous_tile = self.current_tile.copy()
+                    self.current_tile = next_tile.copy()
+                    self.cooldown = 0.2
 
+                    self.player.move()
+
+
+
+    def detect_collision(self, next_tile):
+        return self.is_out_of_bounds(next_tile) or self.is_red_tile(next_tile)
+
+    def is_red_tile(self, next_tile):
+        return self.tiles[next_tile[1]][next_tile[0]].colour == Colour.RED
+
+    def is_out_of_bounds(self, next_tile):
+        return (next_tile[0] < 0 or
+                next_tile[1] < 0 or
+                next_tile[0] >= NO_COLS or
+                next_tile[1] >= NO_ROWS)
