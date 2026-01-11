@@ -10,14 +10,21 @@ class Player(pygame.sprite.Sprite):
         self.moving = False
         self.radius = TILE_WIDTH // 3
 
+        self.scent = None
+        self.cooldown = 0
+
     def draw(self, screen):
         pygame.draw.circle(screen, "white", self.position, self.radius)
 
     def move(self):
         self.position += TILE_WIDTH * self.direction
 
-    def update(self):
+    def update(self, dt):
         keys = pygame.key.get_pressed()
+        self.moving = False
+
+        self.cooldown -= dt
+
 
         if keys[pygame.K_UP]:
             self.direction = pygame.Vector2(0, -1)
@@ -33,5 +40,6 @@ class Player(pygame.sprite.Sprite):
             self.moving = True
 
 
-        if self.moving:
+        if self.moving and self.cooldown <= 0:
             self.move()
+            self.cooldown = 0.2

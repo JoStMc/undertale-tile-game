@@ -1,43 +1,31 @@
 import pygame
 import sys
 from constants import *
-from player import Player
+from game_state import GameState
 from tile import *
 import random
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    game_state = GameState(screen)
 
-    #clock = pygame.time.Clock()
-    #dt = 0
-
-    player = Player(2*TILE_WIDTH, SCREEN_HEIGHT//2)
-
-    no_rows = 9
-    no_cols = 20
-    tiles = []
-    for row in range(no_rows):
-        #tiles.append([])
-        for column in range(no_cols):
-            random_col = random.choice(list(Colour))
-            pos_x = 3*TILE_WIDTH + TILE_WIDTH*column
-            pos_y = SCREEN_HEIGHT//2 + (no_rows//2 - row) * TILE_WIDTH
-            tiles.append(Tile(pos_x, pos_y, TILE_WIDTH, random_col))
+    game_state.draw_initial_grid()
+    
+    clock = pygame.time.Clock()
+    dt = 0
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
-        #dt = clock.tick(60)/1000
-
-        player.draw(screen)
-
-        for tile in tiles:
-            tile.draw(screen)
+        game_state.draw()
+        game_state.update(dt)
 
         pygame.display.update()
+
+        dt = clock.tick(60)/1000
 
 if __name__ == "__main__":
     main()
