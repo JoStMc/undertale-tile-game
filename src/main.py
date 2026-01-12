@@ -1,5 +1,4 @@
 import pygame
-import sys
 from constants import *
 from game_state import GameState
 from tile import *
@@ -16,6 +15,9 @@ def main():
     dt = 0
 
     while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return

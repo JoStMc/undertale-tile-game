@@ -16,25 +16,16 @@ class Tile(pygame.sprite.Sprite):
         self.position = pygame.Rect(x - width//2, y - width//2, width, width)
         self.colour = colour
 
+        self.up = None
+        self.down = None
+        self.left = None
+        self.right = None
+
+    def set_neighbours(self, up, down, left, right=None):
+        self.up = up
+        self.down = down
+        self.left = left
+        self.right = right
+
     def draw(self, screen):
         pygame.draw.rect(screen, self.colour.value, self.position)
-
-    def stepped_on(self, player):
-        match self.colour:
-            case Colour.YELLOW:
-                player.die("Electrocuted")
-            case Colour.ORANGE:
-                player.update_scent("orange")
-            case Colour.BLUE:
-                if player.scent == "orange":
-                    player.die("Eaten by piranhas")
-            case Colour.PURPLE:
-                player.update_scent("lemon")
-                player.move()
-            case Colour.PINK:
-                pass
-            case Colour.GREEN:
-                # To be added
-                pass
-            case Colour.RED:
-                pass
