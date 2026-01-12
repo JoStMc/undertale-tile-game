@@ -47,11 +47,8 @@ class GameState:
         self.draw_initial_grid_recursive(tile.right, visited)
 
     def draw(self):
+        self.player.previous_tile.draw(self.screen)
         self.player.draw(self.screen)
-        prev_tile = self.player.get_prev_tile()
-        if prev_tile is None:
-            return
-        prev_tile.draw(self.screen)
 
     def update(self, dt):
         self.player.update(dt)

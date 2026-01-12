@@ -8,7 +8,8 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.position = pygame.Vector2(x, y)
         # direction = [up/down, left/right] = [-1/1, -1/1]
-        self.direction = [1, 0]
+        self.direction = [0, 0]
+        self.previous_tile = starting_tile
         self.current_tile = starting_tile
         self.moving = False
         self.radius = TILE_WIDTH // 3
@@ -20,21 +21,25 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.circle(screen, "white", self.position, self.radius)
 
     def move(self):
-        self.position[0] += TILE_WIDTH * self.direction[0]
-        self.position[1] += TILE_WIDTH * self.direction[1]
+        if not self.tile_invalid(self.get_next_tile()):
+            self.position[0] += TILE_WIDTH * self.direction[0]
+            self.position[1] += TILE_WIDTH * self.direction[1]
+            self.current_tile = self.get_next_tile()
 
     def stepped_on(self, tile):
         match tile.colour:
             case Colour.YELLOW:
                 self.die("Electrocuted")
             case Colour.ORANGE:
-                self.update_scent("orange")
+                self.set_scent("orange")
             case Colour.BLUE:
                 if self.scent == "orange":
                     self.die("Eaten by piranhas")
             case Colour.PURPLE:
-                self.update_scent("lemon")
-                self.move()
+                 self.set_scent("lemon")
+                 self.move()
+                 if not self.tile_invalid(self.get_next_tile()):
+                    self.stepped_on(self.current_tile)
             case Colour.PINK:
                 pass
             case Colour.GREEN:
@@ -43,7 +48,7 @@ class Player(pygame.sprite.Sprite):
             case _:
                 raise Exception("Tile colour not found")
 
-    def update_scent(self, scent):
+    def set_scent(self, scent):
         self.scent = scent
 
     def die(self, message):
@@ -61,30 +66,14 @@ class Player(pygame.sprite.Sprite):
                 return self.current_tile.down
             case [0, -1]:
                 return self.current_tile.up
+            case [0, 0]:
+                return
             case _:
                 raise ValueError("Invalid direction")
 
-    def get_prev_tile(self):
-        match self.direction:
-            case [1, 0]:
-                return self.current_tile.left
-            case [-1, 0]:
-                return self.current_tile.right
-            case [0, 1]:
-                return self.current_tile.up
-            case [0, -1]:
-                return self.current_tile.down
-            case _:
-                raise ValueError("Invalid direction")
 
-    def detect_collision(self, next_tile):
-        return self.__is_out_of_bounds(next_tile) or self.__is_red_tile(next_tile)
-
-    def __is_red_tile(self, next_tile):
-        return next_tile.colour == Colour.RED
-
-    def __is_out_of_bounds(self, next_tile):
-        return next_tile is None
+    def tile_invalid(self, next_tile):
+        return next_tile is None or next_tile.colour == Colour.RED
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
@@ -108,14 +97,7 @@ class Player(pygame.sprite.Sprite):
         if self.cooldown <= 0:
 
             if self.moving:
-                next_tile = self.get_next_tile()
-
-                if not self.detect_collision(next_tile):
-                    self.current_tile = next_tile
-                    print(f"Current: {self.current_tile}")
-                    print(f"Prev: {self.get_prev_tile()}")
-                    print("-------------")
-
-                    self.move()
-                    self.stepped_on(self.current_tile)
-                    self.cooldown = 0.2
+                self.previous_tile = self.current_tile
+                self.move()
+                self.stepped_on(self.current_tile)
+                self.cooldown = 0.2
