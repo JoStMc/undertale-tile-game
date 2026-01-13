@@ -4,7 +4,7 @@ from enum import Enum
 class Colour(Enum):
     YELLOW = "yellow"
     RED = "red"
-    GREEN = "green"
+    #GREEN = "green"
     ORANGE = "orange"
     BLUE = "blue"
     PURPLE = "purple"

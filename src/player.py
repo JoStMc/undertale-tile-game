@@ -47,9 +47,9 @@ class Player(pygame.sprite.Sprite):
                     self.stepped_on(self.current_tile)
             case Colour.PINK:
                 pass
-            case Colour.GREEN:
+            #case Colour.GREEN:
                 # To be added
-                pass
+                #pass
             case _:
                 raise Exception("Tile colour not found")
 

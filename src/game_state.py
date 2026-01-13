@@ -2,8 +2,6 @@ import random
 from constants import *
 from tile import *
 from player import *
-
-
 from path import gen_simple_path
 from path_assignment import colour_path
 
@@ -19,13 +17,16 @@ class GameState:
 
     def generate_grid(self):
         tiles = []
+        random_cols = random.choices(list(Colour),
+                                     weights=(50, 40, 10, 20, 30, 10), 
+                                     k=NO_ROWS*NO_COLS)
+                                #YELLOW, RED, ORANGE, BLUE, PURPLE, PINK 
         for row in range(NO_ROWS):
             cur_row = []
             for column in range(NO_COLS):
-                random_col = random.choice(list(Colour))
                 x = 3*TILE_WIDTH + TILE_WIDTH*column
                 y = SCREEN_HEIGHT//2 - (NO_ROWS//2 - row) * TILE_WIDTH
-                cur_row.append(Tile(x, y, TILE_WIDTH, random_col))
+                cur_row.append(Tile(x, y, TILE_WIDTH, random_cols[row*NO_COLS+column]))
             tiles.append(cur_row)
 
         for row in range(NO_ROWS):
