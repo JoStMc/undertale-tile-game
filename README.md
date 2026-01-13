@@ -27,6 +27,7 @@ Currently, the game presents you with a 20x9 grid randomly generated, with weigh
 
 ```
 git clone https://github.com/JoStMc/undertale-tile-game
+cd undertale-tile-game
 chmod +x main.sh
 ./main.sh
 ```
