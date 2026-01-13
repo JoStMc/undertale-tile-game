@@ -3,9 +3,16 @@ from constants import *
 from tile import *
 from player import *
 
+
+from path import gen_simple_path
+from path_assignment import colour_path
+
 class GameState:
     def __init__(self, screen):
         self.tiles = self.generate_grid()
+
+        colour_path(gen_simple_path(self.tiles))
+
         self.player = Player(3*TILE_WIDTH, SCREEN_HEIGHT//2, self.tiles)
         self.screen = screen
         self.cooldown = 0

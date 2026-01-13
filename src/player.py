@@ -35,6 +35,11 @@ class Player(pygame.sprite.Sprite):
             case Colour.BLUE:
                 if self.scent == "orange":
                     self.die("Eaten by piranhas")
+                if (tile.up is not None and tile.up.colour == Colour.YELLOW or
+                    tile.down is not None and tile.down.colour == Colour.YELLOW or
+                    tile.left is not None and tile.left.colour == Colour.YELLOW or
+                    tile.right is not None and tile.right.colour == Colour.YELLOW):
+                    self.die("Electrocuted")
             case Colour.PURPLE:
                  self.set_scent("lemon")
                  self.move()
